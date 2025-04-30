@@ -1,15 +1,9 @@
-package com.matiasborra.jokes.model;
+package com.matiasborra.jokes.dto;
 
-import jakarta.persistence.*;
+import lombok.Data;
 
-@Entity
-@Table(name = "categories")
-public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CategoryDTO {
     private Long id;
-
-    @Column(name = "category", nullable = false)
     private String name;
 
     public Long getId() {

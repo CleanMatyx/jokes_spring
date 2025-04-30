@@ -1,23 +1,22 @@
 package com.matiasborra.jokes.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity
 @Table(name = "types")
 public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name= "type", nullable = false)
     private String type;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -4,21 +4,34 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "jokes_flags")
+@Table(name = "joke_flag")
 public class JokeFlag {
 
     @EmbeddedId
-    private JokeFlagId id;
+    private JokeFlagId id = new JokeFlagId();  // ← inicializa aquí
 
-    @ManyToOne
     @MapsId("jokeId")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "joke_id")
     private Joke joke;
 
-    @ManyToOne
     @MapsId("flagId")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flag_id")
     private Flag flag;
+
+    // al usar Lombok @Data te genera setters automáticos,
+    // pero para asegurarte de que el id se sincronice,
+    // puedes hacer manualmente estos setters:
+    public void setJoke(Joke joke) {
+        this.joke = joke;
+        this.id.setJokeId(joke.getId());
+    }
+
+    public void setFlag(Flag flag) {
+        this.flag = flag;
+        this.id.setFlagId(flag.getId());
+    }
 
     public JokeFlagId getId() {
         return id;
@@ -32,15 +45,7 @@ public class JokeFlag {
         return joke;
     }
 
-    public void setJoke(Joke joke) {
-        this.joke = joke;
-    }
-
     public Flag getFlag() {
         return flag;
-    }
-
-    public void setFlag(Flag flag) {
-        this.flag = flag;
     }
 }
