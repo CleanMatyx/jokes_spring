@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Entity
 @Table(name = "jokes_flags")
-@Data
 public class JokeFlag {
+
     @EmbeddedId
     private JokeFlagId id;
 
@@ -19,4 +19,28 @@ public class JokeFlag {
     @MapsId("flagId")
     @JoinColumn(name = "flag_id")
     private Flag flag;
+
+    public JokeFlagId getId() {
+        return id;
+    }
+
+    public void setId(JokeFlagId id) {
+        this.id = id;
+    }
+
+    public Joke getJoke() {
+        return joke;
+    }
+
+    public void setJoke(Joke joke) {
+        this.joke = joke;
+    }
+
+    public Flag getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Flag flag) {
+        this.flag = flag;
+    }
 }
