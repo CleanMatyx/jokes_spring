@@ -115,6 +115,7 @@ public class JokeController {
         dto.setFlags(flags);
 
         return dto;
+
     }
 
     private Joke mapToEntity(CreateJokeDTO in) {
