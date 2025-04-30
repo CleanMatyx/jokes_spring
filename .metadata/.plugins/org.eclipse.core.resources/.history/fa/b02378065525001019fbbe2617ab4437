@@ -1,0 +1,53 @@
+package com.matiasborra.jokes.model;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Table(name = "jokes_flags")
+@Data
+public class JokeFlag {
+    @EmbeddedId
+    private JokeFlagId id;
+
+    @ManyToOne
+    @MapsId("jokeId")
+    @JoinColumn(name = "joke_id")
+    private Joke joke;
+
+    @ManyToOne
+    @MapsId("flagId")
+    @JoinColumn(name = "flag_id")
+    private Flag flag;
+
+}
+
+@Embeddable
+class JokeFlagId implements Serializable {
+    private static final long serialVersionUID = 1L;
+	private Long jokeId;
+    private Long flagId;
+	@Override
+	public int hashCode() {
+		return Objects.hash(flagId, jokeId);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JokeFlagId other = (JokeFlagId) obj;
+		return Objects.equals(flagId, other.flagId) && Objects.equals(jokeId, other.jokeId);
+	}
+	
+	@Override
+	public String toString() {
+		return "JokeFlagId [jokeId=" + jokeId + ", flagId=" + flagId + "]";
+	}
+}

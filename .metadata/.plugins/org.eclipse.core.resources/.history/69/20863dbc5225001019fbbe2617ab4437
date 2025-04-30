@@ -1,0 +1,8 @@
+spring.application.name=jokes_spring
+spring.datasource.url=jdbc:postgresql://localhost:5432/jokes?useSSL=false
+spring.datasource.username=postgres
+spring.datasource.password=matias123
+spring.jpa.hibernate.ddl-auto=update      # none en producción, update/en desarrollo
+spring.jpa.show-sql=true
+spring.mvc.view.prefix=/templates/
+spring.mvc.view.suffix=.html

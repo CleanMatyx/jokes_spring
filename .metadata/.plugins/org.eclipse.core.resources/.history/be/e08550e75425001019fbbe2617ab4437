@@ -1,0 +1,5 @@
+package com.matiasborra.jokes.model;
+
+public class Flag {
+
+}
