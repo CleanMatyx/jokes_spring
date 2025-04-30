@@ -1,4 +1,4 @@
-package com.matiasborra.jokes.service;
+package com.matiasborra.jokes.model.services;
 
 import java.util.HashSet;
 import java.util.List;
@@ -10,12 +10,12 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import com.matiasborra.jokes.model.Category;
-import com.matiasborra.jokes.model.Flag;
-import com.matiasborra.jokes.model.Joke;
-import com.matiasborra.jokes.model.JokeFlag;
-import com.matiasborra.jokes.model.Language;
-import com.matiasborra.jokes.model.Type;
+import com.matiasborra.jokes.model.entity.Category;
+import com.matiasborra.jokes.model.entity.Flag;
+import com.matiasborra.jokes.model.entity.Joke;
+import com.matiasborra.jokes.model.entity.JokeFlag;
+import com.matiasborra.jokes.model.entity.Language;
+import com.matiasborra.jokes.model.entity.Type;
 
 @Service
 public class JokeService {

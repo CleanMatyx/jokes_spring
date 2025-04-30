@@ -1,8 +1,8 @@
 package com.matiasborra.jokes.controller;
 
 import com.matiasborra.jokes.dto.FlagDTO;
-import com.matiasborra.jokes.model.Flag;
-import com.matiasborra.jokes.service.FlagService;
+import com.matiasborra.jokes.model.entity.Flag;
+import com.matiasborra.jokes.model.services.FlagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

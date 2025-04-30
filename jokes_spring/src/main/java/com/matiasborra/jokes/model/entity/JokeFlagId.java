@@ -1,8 +1,7 @@
-package com.matiasborra.jokes.model;
+package com.matiasborra.jokes.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.Data;
 
 import java.io.Serializable;
 

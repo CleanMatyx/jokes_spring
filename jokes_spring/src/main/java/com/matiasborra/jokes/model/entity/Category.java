@@ -1,4 +1,4 @@
-package com.matiasborra.jokes.model;
+package com.matiasborra.jokes.model.entity;
 
 import jakarta.persistence.*;
 

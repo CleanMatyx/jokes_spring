@@ -1,7 +1,6 @@
-package com.matiasborra.jokes.model;
+package com.matiasborra.jokes.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity
 @Table(name = "joke_flag")
