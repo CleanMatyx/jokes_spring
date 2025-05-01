@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout">
+<head>
+  <meta charset="UTF-8"/>
+  <!-- este title “inserta” el <title> que pongas en cada vista -->
+  <title th:insert="~{::title}">Jokes App</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<header>
+  <nav>
+    <a th:href="@{/jokes}">Jokes</a> |
+    <a th:href="@{/flags}">Flags</a>
+  </nav>
+  <hr/>
+</header>
+<!-- aquí Thymeleaf “insertará” el <body> de cada vista -->
+<main th:insert="~{::body}"></main>
+</body>
+</html>

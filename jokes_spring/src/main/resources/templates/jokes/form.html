@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout}">
+<head>
+    <title th:text="${jokeDto.id} != null ? 'Editar Joke' : 'Crear Joke'">Formulario</title>
+</head>
+<body>
+<div>
+    <h1 th:text="${jokeDto.id != null} ? 'Editar Joke' : 'Nuevo Joke'"></h1>
+    <form th:action="${jokeDto.id != null} ? '/jokes/' + ${jokeDto.id} : '/jokes'"
+          th:object="${jokeDto}" method="post">
+        <div>
+            <label>Text1:</label>
+            <input type="text" th:field="*{text1}" required />
+        </div>
+        <div>
+            <label>Text2:</label>
+            <textarea th:field="*{text2}" required></textarea>
+        </div>
+        <div>
+            <label>Categoría:</label>
+            <select th:field="*{category.id}">
+                <option th:each="c : ${categories}"
+                        th:value="${c.id}"
+                        th:text="${c.name}">Cat</option>
+            </select>
+        </div>
+        <div>
+            <label>Tipo:</label>
+            <select th:field="*{type.id}">
+                <option th:each="t : ${types}"
+                        th:value="${t.id}"
+                        th:text="${t.type}">Tipo</option>
+            </select>
+        </div>
+        <div>
+            <label>Idioma:</label>
+            <select th:field="*{language.id}">
+                <option th:each="l : ${langs}"
+                        th:value="${l.id}"
+                        th:text="${l.language}">Lang</option>
+            </select>
+        </div>
+        <div>
+            <label>Flags:</label>
+            <select th:field="*{flags}" multiple>
+                <option th:each="f : ${flags}"
+                        th:value="${f.id}"
+                        th:text="${f.name}">Flag</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit">Guardar</button>
+            <a th:href="@{/jokes}">Cancelar</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

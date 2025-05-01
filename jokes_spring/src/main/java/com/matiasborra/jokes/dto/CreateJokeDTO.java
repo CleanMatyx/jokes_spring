@@ -30,7 +30,7 @@ public class CreateJokeDTO {
     public List<NestedId> getFlags() { return flags; }
     public void setFlags(List<NestedId> flags) { this.flags = flags; }
 
-    /** Clase interna que sólo contiene un id */
+    /** Clase interna que solo contiene un id */
     public static class NestedId {
         private Long id;
         public Long getId() { return id; }
