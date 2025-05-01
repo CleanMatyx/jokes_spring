@@ -13,6 +13,7 @@ import com.matiasborra.jokes.model.entity.Language;
 import com.matiasborra.jokes.model.entity.Flag;
 import com.matiasborra.jokes.model.entity.JokeFlag;
 import com.matiasborra.jokes.model.services.JokeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/jokes")
 public class JokeController {
 
+    @Autowired
     private final JokeService service;
 
     public JokeController(JokeService service) {
@@ -88,7 +90,7 @@ public class JokeController {
         if (j.getType() != null) {
             TypeDTO td = new TypeDTO();
             td.setId(j.getType().getId());
-            td.setName(j.getType().getType());
+            td.setName(j.getType().getName());
             dto.setType(td);
         }
 
@@ -96,7 +98,7 @@ public class JokeController {
         if (j.getLanguage() != null) {
             LanguageDTO ld = new LanguageDTO();
             ld.setId(j.getLanguage().getId());
-            ld.setName(j.getLanguage().getLanguage());
+            ld.setName(j.getLanguage().getName());
             dto.setLanguage(ld);
         }
 
@@ -107,7 +109,7 @@ public class JokeController {
                 .map(jf -> {
                     FlagDTO fd = new FlagDTO();
                     fd.setId(jf.getFlag().getId());
-                    fd.setName(jf.getFlag().getFlag());
+                    fd.setName(jf.getFlag().getName());
                     return fd;
                 })
                 .collect(Collectors.toList())
@@ -125,21 +127,21 @@ public class JokeController {
 
         // convierto cada NestedId en su entidad con sólo el id
         Category c = new Category();
-        c.setId(in.getCategory().getId());
+        c.setId(in.getCategory());
         j.setCategory(c);
 
         Type t = new Type();
-        t.setId(in.getType().getId());
+        t.setId(in.getType());
         j.setType(t);
 
         Language l = new Language();
-        l.setId(in.getLanguage().getId());
+        l.setId(in.getLanguage());
         j.setLanguage(l);
 
         if (in.getFlags() != null) {
             in.getFlags().forEach(nid -> {
                 Flag f = new Flag();
-                f.setId(nid.getId());
+                f.setId(nid);
 
                 JokeFlag jf = new JokeFlag();
                 jf.setJoke(j);

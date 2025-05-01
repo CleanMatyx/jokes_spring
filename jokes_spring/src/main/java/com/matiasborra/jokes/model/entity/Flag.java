@@ -13,7 +13,7 @@ public class Flag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String flag;
+    private String name;
 
     @OneToMany(mappedBy = "flag", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<JokeFlag> jokeFlags = new HashSet<>();
@@ -26,12 +26,12 @@ public class Flag {
         this.id = id;
     }
 
-    public String getFlag() {
-        return flag;
+    public String getName() {
+        return name;
     }
 
-    public void setFlag(String flag) {
-        this.flag = flag;
+    public void setName(String flag) {
+        this.name = flag;
     }
 
     public Set<JokeFlag> getJokeFlags() {

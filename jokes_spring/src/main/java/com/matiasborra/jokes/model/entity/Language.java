@@ -10,7 +10,7 @@ public class Language {
     private Long id;
 
     @Column(name= "language", nullable = false)
-    private String language;
+    private String name;
 
     public Long getId() {
         return id;
@@ -20,11 +20,11 @@ public class Language {
         this.id = id;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getName() {
+        return name;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setName(String language) {
+        this.name = language;
     }
 }

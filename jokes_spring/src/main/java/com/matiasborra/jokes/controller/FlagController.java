@@ -37,7 +37,7 @@ public class FlagController {
     public ResponseEntity<FlagDTO> create(@RequestBody FlagDTO dto) {
         // map DTO → entidad
         Flag toSave = new Flag();
-        toSave.setFlag(dto.getName());
+        toSave.setName(dto.getName());
         Flag created = service.create(toSave);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -52,7 +52,7 @@ public class FlagController {
     @PutMapping("/{id}")
     public ResponseEntity<FlagDTO> update(@PathVariable Long id, @RequestBody FlagDTO dto) {
         Flag toUpdate = new Flag();
-        toUpdate.setFlag(dto.getName());
+        toUpdate.setName(dto.getName());
         Flag updated = service.update(id, toUpdate);
         return ResponseEntity.ok(toDto(updated));
     }
@@ -66,7 +66,7 @@ public class FlagController {
     private FlagDTO toDto(Flag f) {
         FlagDTO dto = new FlagDTO();
         dto.setId(f.getId());
-        dto.setName(f.getFlag());
+        dto.setName(f.getName());
         return dto;
     }
 }

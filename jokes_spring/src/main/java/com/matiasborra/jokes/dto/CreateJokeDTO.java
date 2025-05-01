@@ -3,37 +3,37 @@ package com.matiasborra.jokes.dto;
 import java.util.List;
 
 public class CreateJokeDTO {
-    private NestedId category;
-    private NestedId type;
-    private NestedId language;
+    private Long id;
+    private Long categoryId;
+    private Long typeId;
+    private Long languageId;
     private String text1;
     private String text2;
-    private List<NestedId> flags;
+    private List<Long> flagIds;
 
-    // getters / setters
+    // id
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public NestedId getCategory() { return category; }
-    public void setCategory(NestedId category) { this.category = category; }
+    // categoría
+    public Long getCategory() { return categoryId; }
+    public void setCategory(Long categoryId) { this.categoryId = categoryId; }
 
-    public NestedId getType() { return type; }
-    public void setType(NestedId type) { this.type = type; }
+    // tipo
+    public Long getType() { return typeId; }
+    public void setType(Long typeId) { this.typeId = typeId; }
 
-    public NestedId getLanguage() { return language; }
-    public void setLanguage(NestedId language) { this.language = language; }
+    // lenguaje
+    public Long getLanguage() { return languageId; }
+    public void setLanguage(Long languageId) { this.languageId = languageId; }
 
+    // textos
     public String getText1() { return text1; }
     public void setText1(String text1) { this.text1 = text1; }
-
     public String getText2() { return text2; }
     public void setText2(String text2) { this.text2 = text2; }
 
-    public List<NestedId> getFlags() { return flags; }
-    public void setFlags(List<NestedId> flags) { this.flags = flags; }
-
-    /** Clase interna que solo contiene un id */
-    public static class NestedId {
-        private Long id;
-        public Long getId() { return id; }
-        public void setId(Long id) { this.id = id; }
-    }
+    // flags
+    public List<Long> getFlags() { return flagIds; }
+    public void setFlags(List<Long> flagIds) { this.flagIds = flagIds; }
 }

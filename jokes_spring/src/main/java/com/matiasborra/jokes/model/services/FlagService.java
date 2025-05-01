@@ -31,7 +31,7 @@ public class FlagService {
 
     public Flag update(Long id, Flag datos) {
         Flag existing = findById(id);
-        existing.setFlag(datos.getFlag());
+        existing.setName(datos.getName());
         return repo.save(existing);
     }
 
