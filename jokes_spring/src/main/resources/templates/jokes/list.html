@@ -1,34 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{fragments/layout :: layout}">
-<head>
-    <title>Listado de Jokes</title>
-</head>
-<body>
-<div>
+      th:replace="fragments/layout :: layout(
+                    'Listado de Jokes',
+                    ~{::content}
+                  )">
+<section th:fragment="content">
     <h1>Jokes</h1>
-    <a th:href="@{/jokes/new}">Crear nuevo Joke</a>
-    <table>
+    <a th:href="@{/jokes/new}" class="btn btn-primary mb-3">
+        <i class="bi bi-plus-lg"></i> Crear nuevo Joke
+    </a>
+    <table class="table table-striped">
         <thead>
         <tr>
-            <th>ID</th><th>Text1</th><th>Categoría</th><th>Acciones</th>
+            <th>ID</th>
+            <th>Text1</th>
+            <th>Text2</th>
+            <th>Categoría</th>
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="joke : ${jokes}">
             <td th:text="${joke.id}">1</td>
-            <td th:text="${joke.text1}">Chiste…</td>
-            <td th:text="${joke.category.name}">Categoría</td>
+            <td th:text="${joke.text1}">…</td>
+            <td th:text="${joke.text2}">…</td>
+            <td th:text="${joke.category != null ? joke.category.name : '– Sin categoría –'}"></td>
             <td>
-                <a th:href="@{'/jokes/' + ${joke.id} + '/edit'}">Editar</a>
-                <form th:action="@{'/jokes/' + ${joke.id} + '/delete'}"
-                      method="post" style="display:inline">
-                    <button type="submit">Borrar</button>
+                <a th:href="@{/jokes/{id}/edit(id=${joke.id})}"
+                   class="btn btn-sm btn-outline-secondary me-1">
+                    <i class="bi bi-pencil"></i> Editar
+                </a>
+                <form th:action="@{/jokes/{id}(id=${joke.id})}" method="post"
+                      style="display:inline">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                            onclick="return confirm('¿Borrar este joke?');">
+                        <i class="bi bi-trash"></i> Borrar
+                    </button>
                 </form>
             </td>
         </tr>
         </tbody>
     </table>
-</div>
-</body>
+</section>
 </html>
