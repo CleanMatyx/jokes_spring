@@ -1,7 +1,5 @@
 package com.matiasborra.jokes.dto;
 
-import lombok.Data;
-
 public class LanguageDTO {
     private Long id;
     private String name;

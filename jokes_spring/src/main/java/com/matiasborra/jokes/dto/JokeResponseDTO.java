@@ -1,7 +1,6 @@
 package com.matiasborra.jokes.dto;
 
 import java.util.List;
-import lombok.Data;
 
 public class JokeResponseDTO {
     private Long id;
