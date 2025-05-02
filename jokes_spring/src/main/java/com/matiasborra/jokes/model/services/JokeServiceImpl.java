@@ -58,14 +58,15 @@ public class JokeServiceImpl implements IJokeService {
         joke.setCategory(cat);
         joke.setType(type);
         joke.setLanguage(lang);
+        Long jokeId = jokeDAO.save(joke).getId();
 
         if (in.getFlags() != null) {
             Set<JokeFlag> flags = new HashSet<>();
             for (JokeFlag jf : in.getFlags()) {
                 Flag f = flagDAO.getReferenceById(jf.getFlag().getId());
                 JokeFlag newJf = new JokeFlag();
-                newJf.setJoke(joke);
-                newJf.setFlag(f);
+                newJf.setJokeId(joke);
+                newJf.setFlagId(f);
                 flags.add(newJf);
             }
             joke.setFlags(flags);

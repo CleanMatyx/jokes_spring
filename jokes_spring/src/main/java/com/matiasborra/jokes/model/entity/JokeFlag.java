@@ -13,33 +13,35 @@ public class JokeFlag implements Serializable {
 
     @Id
     @Column(name = "joke_id", nullable = false)
-    private Integer jokeId;
+    private Long jokeId;
 
     @Id
     @Column(name = "flag_id", nullable = false)
-    private Integer flagId;
+    private Long flagId;
 
     public JokeFlag() {
     }
 
-    public JokeFlag(Integer jokeId, Integer flagId) {
+    public JokeFlag(Long jokeId, Long flagId) {
         this.jokeId = jokeId;
         this.flagId = flagId;
     }
 
-    public Integer getJokeId() {
+    public Long getJokeId() {
         return jokeId;
     }
 
-    public void setJokeId(Integer jokeId) {
+    public void setJokeId(Long jokeId) {
         this.jokeId = jokeId;
     }
 
-    public Integer getFlagId() {
+    public Long getFlagId() {
         return flagId;
     }
 
-    public void setFlagId(Integer flagId) {
+    public void setFlagId(Long flagId) {
         this.flagId = flagId;
     }
+
+    public
 }
