@@ -1,5 +1,9 @@
 package com.matiasborra.jokes.model.services;
 
+import com.matiasborra.jokes.dto.CategoryDto;
+import com.matiasborra.jokes.dto.FlagDto;
+import com.matiasborra.jokes.dto.JokeDto;
+import com.matiasborra.jokes.dto.LanguageDto;
 import com.matiasborra.jokes.model.dao.*;
 import com.matiasborra.jokes.model.entity.*;
 import jakarta.persistence.EntityManager;
@@ -14,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class JokeServiceImpl implements IJokeService {
@@ -34,15 +39,19 @@ public class JokeServiceImpl implements IJokeService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Joke> findAll() {
-        return jokeDAO.findAll();
+    public List<JokeDto> findAll() {
+        return jokeDAO.findAll()
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Joke findById(Long id) {
-        return jokeDAO.findById(id)
+    public JokeDto findById(Long id) {
+        Joke entity = jokeDAO.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Joke no encontrado con id: " + id));
+        return toDto(entity);
     }
 
     @Override
@@ -87,7 +96,8 @@ public class JokeServiceImpl implements IJokeService {
             joke.setFlags(flags);
         }
 
-        return jokeDAO.save(joke);
+        Joke saved = jokeDAO.save(joke);
+        return toDto(saved);
     }
 
     @Override
@@ -131,8 +141,9 @@ public class JokeServiceImpl implements IJokeService {
             }
             existing.setFlags(flags);
         }
+        Joke updated = jokeDAO.save(existing);
 
-        return jokeDAO.save(existing);
+        return toDto(updated);
     }
 
     @Override
@@ -163,5 +174,40 @@ public class JokeServiceImpl implements IJokeService {
 
     public Optional<Flag> findFlagById(Long id) {
         return flagDAO.findById(id);
+    }
+
+    private JokeDto toDto(Joke entity) {
+        JokeDto dto = new JokeDto();
+        dto.setId(entity.getId());
+        dto.setText1(entity.getText1());
+        dto.setText2(entity.getText2());
+
+        if (entity.getCategory() != null) {
+            CategoryDto c = new CategoryDto();
+            c.setId(entity.getCategory().getId());
+            c.setCategory(entity.getCategory().getCategory());
+            dto.setCategory(c);
+        }
+
+        if (entity.getLanguage() != null) {
+            LanguageDto l = new LanguageDto();
+            l.setId(entity.getLanguage().getId());
+            l.setCode(entity.getLanguage().getCode());
+            l.setLanguage(entity.getLanguage().getLanguage());
+            dto.setLanguage(l);
+        }
+
+        if (entity.getFlags() != null) {
+            Set<FlagDto> fd = entity.getFlags().stream().map(f -> {
+                FlagDto fx = new FlagDto();
+                fx.setId(f.getId());
+                fx.setName(f.getName());
+                fx.setFlag(f.getFlag());
+                return fx;
+            }).collect(Collectors.toSet());
+            dto.setFlags(fd);
+        }
+
+        return dto;
     }
 }

@@ -30,7 +30,6 @@ public class Language implements java.io.Serializable {
 	private String language;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "language")
-	@JsonIgnore
 	private Set<Joke> jokeses = new HashSet<Joke>(0);
 
 	public Language() {

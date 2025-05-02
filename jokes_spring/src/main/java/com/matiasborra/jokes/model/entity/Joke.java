@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,17 +22,14 @@ public class Joke implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
-	@JsonBackReference
 	private Category categories;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "language_id")
-	@JsonBackReference
 	private Language language;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "type_id")
-	@JsonBackReference
 	private Type types;
 
 	@Column(name = "text1")

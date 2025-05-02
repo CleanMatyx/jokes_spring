@@ -24,28 +24,28 @@ public class JokeViewController {
     // Registra aquí el PropertyEditor
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(JokeFlag.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) throws IllegalArgumentException {
-                if (text == null || text.isEmpty()) {
-                    setValue(null);
-                } else {
-                    Long id = Long.valueOf(text);
-                    Flag flag = service.findFlagById(id)
-                            .orElseThrow(() -> new IllegalArgumentException("Flag no encontrada: " + id));
-                    setValue(flag);
-                }
-            }
-        });
+//        binder.registerCustomEditor(JokeFlag.class, new PropertyEditorSupport() {
+//            @Override
+//            public void setAsText(String text) throws IllegalArgumentException {
+//                if (text == null || text.isEmpty()) {
+//                    setValue(null);
+//                } else {
+//                    Long id = Long.valueOf(text);
+//                    Flag flag = service.findFlagById(id)
+//                            .orElseThrow(() -> new IllegalArgumentException("Flag no encontrada: " + id));
+//                    setValue(flag);
+//                }
+//            }
+//        });
     }
 
     // 1) Listado de todos los jokes
-    @GetMapping
-    public String listJokes(Model model) {
-        model.addAttribute("jokes", service.findAll());
-        model.addAttribute("titulo", "Listado de Jokes");
-        return "jokes/list";
-    }
+//    @GetMapping
+//    public String listJokes(Model model) {
+//        model.addAttribute("jokes", service.findAll());
+//        model.addAttribute("titulo", "Listado de Jokes");
+//        return "jokes/list";
+//    }
 
     // 2) Formulario para crear uno nuevo
     @GetMapping("/new")

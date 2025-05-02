@@ -1,5 +1,6 @@
 package com.matiasborra.jokes.controller;
 
+import com.matiasborra.jokes.dto.JokeDto;
 import com.matiasborra.jokes.model.entity.Joke;
 import com.matiasborra.jokes.model.services.IJokeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class JokeRestController {
 
     @GetMapping({"", "/", "/jokes"})
     public ResponseEntity<?> index() {
-        List<Joke> jokes = new ArrayList<>();
+        List<JokeDto> jokes = new ArrayList<>();
         Map<String, Object> resp = new HashMap<>();
 
         try {
