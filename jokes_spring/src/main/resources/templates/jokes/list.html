@@ -2,11 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Listado de Jokes</title>
+    <title th:text="${titulo}">Listado de Jokes</title>
 </head>
 <body>
-<h1>Listado de Jokes</h1>
+<h1 th:text="${titulo}">Listado de Jokes</h1>
+
 <p><a th:href="@{/jokes/new}">Crear nuevo Joke</a></p>
+
 <table border="1" cellpadding="5">
     <thead>
     <tr>
@@ -26,9 +28,11 @@
         <td>
             <a th:href="@{/jokes/{id}/edit(id=${joke.id})}">Editar</a>
             |
-            <form th:action="@{/jokes/{id}(id=${joke.id})}" method="post" style="display:inline">
-                <input type="hidden" name="_method" value="delete"/>
-                <button type="submit" onclick="return confirm('¿Borrar este joke?');">
+            <form th:action="@{/jokes/{id}/delete(id=${joke.id})}"
+                  method="post"
+                  style="display:inline">
+                <button type="submit"
+                        onclick="return confirm('¿Borrar este joke?');">
                     Borrar
                 </button>
             </form>
@@ -36,5 +40,6 @@
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>

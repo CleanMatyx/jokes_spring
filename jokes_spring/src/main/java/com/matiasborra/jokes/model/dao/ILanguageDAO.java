@@ -2,7 +2,7 @@ package com.matiasborra.jokes.model.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.matiasborra.jokes.model.entity.Category;
+import com.matiasborra.jokes.model.entity.Language;
 
 @Repository
-public interface CategoryDAO extends JpaRepository<Category, Long> {}
+public interface ILanguageDAO extends JpaRepository<Language, Long> {}

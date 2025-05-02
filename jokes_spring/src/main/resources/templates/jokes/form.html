@@ -2,55 +2,80 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="${isEditMode} ? 'Editar Joke' : 'Nuevo Joke'">Joke Form</title>
+    <title th:text="${titulo}">Formulario Joke</title>
 </head>
 <body>
-<h1 th:text="${isEditMode} ? 'Editar Joke' : 'Nuevo Joke'">Joke Form</h1>
+<h1 th:text="${titulo}">Formulario Joke</h1>
 
-<form th:action="@{${formAction}}" th:object="${jokeDto}" method="post">
-    <!-- En update, Spring espera PUT -->
-    <input type="hidden" name="_method" value="put" th:if="${isEditMode}"/>
+<!-- El action se decide según si 'joke.id' ya existe o no -->
+<form th:object="${joke}"
+      th:action="@{${joke.id} != null ? '/jokes/' + ${joke.id} : '/jokes'}"
+      method="post">
+
+    <!-- Mostrar errores globales -->
+    <div th:if="${#fields.hasErrors('*')}">
+        <ul>
+            <li th:each="err : ${#fields.errors('*')}"
+                th:text="${err}">Error</li>
+        </ul>
+    </div>
 
     <!-- Texto 1 -->
     <div>
         <label for="text1">Texto 1</label>
         <input type="text" id="text1" th:field="*{text1}" />
+        <p th:if="${#fields.hasErrors('text1')}"
+           th:errors="*{text1}">Error texto 1</p>
     </div>
 
     <!-- Texto 2 -->
     <div>
         <label for="text2">Texto 2</label>
         <input type="text" id="text2" th:field="*{text2}" />
+        <p th:if="${#fields.hasErrors('text2')}"
+           th:errors="*{text2}">Error texto 2</p>
     </div>
 
     <!-- Categoría -->
     <div>
         <label for="category">Categoría</label>
-        <select id="category" th:field="*{category}">
-            <option value="" disabled th:if="${jokeDto.category} == null">-- selecciona una --</option>
-            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}">
+        <select id="category" th:field="*{category.id}">
+            <option value="" disabled>-- selecciona una --</option>
+            <option th:each="c : ${categories}"
+                    th:value="${c.id}"
+                    th:text="${c.name}">
             </option>
         </select>
+        <p th:if="${#fields.hasErrors('category.id')}"
+           th:errors="*{category.id}">Error categoría</p>
     </div>
 
     <!-- Tipo -->
     <div>
         <label for="type">Tipo</label>
-        <select id="type" th:field="*{type}">
-            <option value="" disabled th:if="${jokeDto.type} == null">-- selecciona uno --</option>
-            <option th:each="t : ${types}" th:value="${t.id}" th:text="${t.name}">
+        <select id="type" th:field="*{type.id}">
+            <option value="" disabled>-- selecciona uno --</option>
+            <option th:each="t : ${types}"
+                    th:value="${t.id}"
+                    th:text="${t.name}">
             </option>
         </select>
+        <p th:if="${#fields.hasErrors('type.id')}"
+           th:errors="*{type.id}">Error tipo</p>
     </div>
 
     <!-- Lenguaje -->
     <div>
         <label for="language">Lenguaje</label>
-        <select id="language" th:field="*{language}">
-            <option value="" disabled th:if="${jokeDto.language} == null">-- selecciona uno --</option>
-            <option th:each="l : ${languages}" th:value="${l.id}" th:text="${l.name}">
+        <select id="language" th:field="*{language.id}">
+            <option value="" disabled>-- selecciona uno --</option>
+            <option th:each="l : ${languages}"
+                    th:value="${l.id}"
+                    th:text="${l.name}">
             </option>
         </select>
+        <p th:if="${#fields.hasErrors('language.id')}"
+           th:errors="*{language.id}">Error lenguaje</p>
     </div>
 
     <!-- Flags (checkbox múltiple) -->
@@ -58,18 +83,25 @@
         <p>Flags:</p>
         <div th:each="flag : ${flags}">
             <label>
-                <input type="checkbox" th:field="*{flags}" th:value="${flag.id}" />
+                <input type="checkbox"
+                       th:field="*{flags}"
+                       th:value="${flag.id}" />
                 <span th:text="${flag.name}">Flag</span>
             </label>
         </div>
+        <p th:if="${#fields.hasErrors('flags')}"
+           th:errors="*{flags}">Error flags</p>
     </div>
 
     <!-- Submit -->
     <div>
-        <button type="submit" th:text="${isEditMode} ? 'Actualizar' : 'Crear'">
+        <button type="submit"
+                th:text="${joke.id} != null ? 'Actualizar' : 'Crear'">
             Guardar
         </button>
+        <a th:href="@{/jokes}">Cancelar</a>
     </div>
 </form>
+
 </body>
 </html>

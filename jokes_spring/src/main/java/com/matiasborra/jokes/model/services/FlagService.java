@@ -1,7 +1,7 @@
 package com.matiasborra.jokes.model.services;
 
 import com.matiasborra.jokes.model.entity.Flag;
-import com.matiasborra.jokes.model.dao.FlagDAO;
+import com.matiasborra.jokes.model.dao.IFlagDAO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +10,9 @@ import java.util.List;
 @Service
 public class FlagService {
 
-    private final FlagDAO repo;
+    private final IFlagDAO repo;
 
-    public FlagService(FlagDAO repo) {
+    public FlagService(IFlagDAO repo) {
         this.repo = repo;
     }
 
