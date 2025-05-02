@@ -3,6 +3,7 @@ package com.matiasborra.jokes.model.services;
 import com.matiasborra.jokes.model.entity.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IJokeServices {
     public List<Joke> findAll();
@@ -14,4 +15,5 @@ public interface IJokeServices {
     public List<Type> findAllTypes();
     public List<Language> findAllLanguages();
     public List<Flag> findAllFlags();
+    Optional<Flag> findFlagById(Long id);
 }

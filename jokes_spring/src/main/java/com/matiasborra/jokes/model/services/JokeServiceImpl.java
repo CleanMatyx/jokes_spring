@@ -1,10 +1,6 @@
 package com.matiasborra.jokes.model.services;
 
-import com.matiasborra.jokes.model.dao.ICategoryDAO;
-import com.matiasborra.jokes.model.dao.IFlagDAO;
-import com.matiasborra.jokes.model.dao.IJokeDAO;
-import com.matiasborra.jokes.model.dao.ILanguageDAO;
-import com.matiasborra.jokes.model.dao.ITypeDAO;
+import com.matiasborra.jokes.model.dao.*;
 import com.matiasborra.jokes.model.entity.Category;
 import com.matiasborra.jokes.model.entity.Flag;
 import com.matiasborra.jokes.model.entity.Joke;
@@ -22,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -135,5 +132,9 @@ public class JokeServiceImpl implements IJokeServices {
     public List<Flag> findAllFlags() {
         TypedQuery<Flag> q = em.createQuery("SELECT f FROM Flag f", Flag.class);
         return q.getResultList();
+    }
+
+    public Optional<Flag> findFlagById(Long id) {
+        return flagDAO.findById(id);
     }
 }

@@ -1,13 +1,18 @@
 package com.matiasborra.jokes.controller;
 
+import com.matiasborra.jokes.model.entity.Flag;
 import com.matiasborra.jokes.model.entity.Joke;
+import com.matiasborra.jokes.model.entity.JokeFlag;
 import com.matiasborra.jokes.model.services.IJokeServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+
+import java.beans.PropertyEditorSupport;
 
 @Controller
 @RequestMapping("/jokes")
@@ -15,6 +20,24 @@ public class JokeViewController {
 
     @Autowired
     private IJokeServices service;
+
+    // Registra aquí el PropertyEditor
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(JokeFlag.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                if (text == null || text.isEmpty()) {
+                    setValue(null);
+                } else {
+                    Long id = Long.valueOf(text);
+                    Flag flag = service.findFlagById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("Flag no encontrada: " + id));
+                    setValue(flag);
+                }
+            }
+        });
+    }
 
     // 1) Listado de todos los jokes
     @GetMapping
@@ -35,7 +58,8 @@ public class JokeViewController {
 
     // 3) Procesar creación
     @PostMapping
-    public String createJoke(@Valid @ModelAttribute("joke") Joke joke, BindingResult result, Model model) {
+    public String createJoke(@Valid @ModelAttribute("joke") Joke joke,
+                             BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("titulo", "Nuevo Joke");
             populateFormOptions(model);
@@ -57,11 +81,9 @@ public class JokeViewController {
 
     // 5) Procesar edición
     @PostMapping("/{id}")
-    public String updateJoke(
-            @PathVariable Long id,
-            @Valid @ModelAttribute("joke") Joke joke,
-            BindingResult result,
-            Model model) {
+    public String updateJoke(@PathVariable Long id,
+                             @Valid @ModelAttribute("joke") Joke joke,
+                             BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("titulo", "Editar Joke");
             populateFormOptions(model);
