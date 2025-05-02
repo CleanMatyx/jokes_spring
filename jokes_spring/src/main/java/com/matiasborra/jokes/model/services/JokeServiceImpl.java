@@ -35,7 +35,7 @@ public class JokeServiceImpl implements IJokeService {
     @Override
     @Transactional(readOnly = true)
     public List<Joke> findAll() {
-        return (List<Joke>) jokeDAO.findAll();
+        return jokeDAO.findAll();
     }
 
     @Override
@@ -58,16 +58,31 @@ public class JokeServiceImpl implements IJokeService {
         joke.setCategory(cat);
         joke.setType(type);
         joke.setLanguage(lang);
-        Long jokeId = jokeDAO.save(joke).getId();
 
         if (in.getFlags() != null) {
-            Set<JokeFlag> flags = new HashSet<>();
-            for (JokeFlag jf : in.getFlags()) {
-                Flag f = flagDAO.getReferenceById(jf.getFlag().getId());
-                JokeFlag newJf = new JokeFlag();
-                newJf.setJokeId(joke);
-                newJf.setFlagId(f);
-                flags.add(newJf);
+            Set<Flag> flags = new HashSet<>();
+            for (Flag inputFlag : in.getFlags()) {
+                // Busca el flag por su nombre o atributo único
+                Optional<Flag> existingFlag = flagDAO.findByName(inputFlag.getName());
+                Flag flag;
+                if (existingFlag.isPresent()) {
+                    flag = existingFlag.get();
+                } else {
+                    // Crea y guarda el nuevo flag si no existe
+                    flag = new Flag();
+                    flag.setName(inputFlag.getName());
+                    flag.setFlag(inputFlag.getFlag());
+                    flag = flagDAO.save(flag);
+                }
+
+                // Agrega el flag al conjunto de flags del chiste
+                flags.add(flag);
+
+                // Registra la relación en la tabla jokes_flags
+                JokeFlag jokeFlag = new JokeFlag();
+                jokeFlag.setJokeId(joke.getId());
+                jokeFlag.setFlagId(flag.getId());
+                em.persist(jokeFlag);
             }
             joke.setFlags(flags);
         }
@@ -91,13 +106,30 @@ public class JokeServiceImpl implements IJokeService {
 
         existing.getFlags().clear();
         if (datos.getFlags() != null) {
-            for (JokeFlag jf : datos.getFlags()) {
-                Flag f = flagDAO.getReferenceById(jf.getFlag().getId());
-                JokeFlag newJf = new JokeFlag();
-                newJf.setJoke(existing);
-                newJf.setFlag(f);
-                existing.getFlags().add(newJf);
+            Set<Flag> flags = new HashSet<>();
+            for (Flag inputFlag : datos.getFlags()) {
+                // Buscar o crear el flag
+                Optional<Flag> existingFlag = flagDAO.findByName(inputFlag.getName());
+                Flag flag;
+                if (existingFlag.isPresent()) {
+                    flag = existingFlag.get();
+                } else {
+                    flag = new Flag();
+                    flag.setName(inputFlag.getName());
+                    flag.setFlag(inputFlag.getFlag());
+                    flag = flagDAO.save(flag);
+                }
+
+                // Agregar el flag al conjunto
+                flags.add(flag);
+
+                // Registrar la relación en la tabla jokes_flags
+                JokeFlag jokeFlag = new JokeFlag();
+                jokeFlag.setJokeId(existing.getId());
+                jokeFlag.setFlagId(flag.getId());
+                em.persist(jokeFlag);
             }
+            existing.setFlags(flags);
         }
 
         return jokeDAO.save(existing);

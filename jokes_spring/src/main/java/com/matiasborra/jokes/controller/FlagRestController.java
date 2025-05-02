@@ -137,7 +137,7 @@ public class FlagRestController {
         }
 
         resp.put("Message", "El flag con ID: "
-                .concat(flagUpdated.getId().toString().concat(" ha sido actualizado")));
+                .concat(Long.toString(id).concat(" no existe en la base de datos")));
         resp.put("Flag", flagUpdated);
         return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.CREATED);
     }

@@ -42,6 +42,4 @@ public class JokeFlag implements Serializable {
     public void setFlagId(Long flagId) {
         this.flagId = flagId;
     }
-
-    public
 }

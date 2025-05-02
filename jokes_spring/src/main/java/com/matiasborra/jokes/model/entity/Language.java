@@ -4,6 +4,8 @@ package com.matiasborra.jokes.model.entity;
 import java.io.Serial;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 /**
@@ -28,6 +30,7 @@ public class Language implements java.io.Serializable {
 	private String language;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "language")
+	@JsonIgnore
 	private Set<Joke> jokeses = new HashSet<Joke>(0);
 
 	public Language() {

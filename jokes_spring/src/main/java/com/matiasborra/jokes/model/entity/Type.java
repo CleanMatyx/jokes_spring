@@ -3,6 +3,8 @@ package com.matiasborra.jokes.model.entity;
 import java.io.Serial;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +23,7 @@ public class Type implements java.io.Serializable {
 	private String type;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "types")
+	@JsonIgnore
 	private Set<Joke> jokeses = new HashSet<Joke>(0);
 
 	public Type() {
