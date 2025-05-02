@@ -7,12 +7,11 @@
 <body>
 <h1 th:text="${titulo}">Formulario Joke</h1>
 
-<!-- El action se decide según si 'joke.id' ya existe o no -->
 <form th:object="${joke}"
-      th:action="@{${joke.id} != null ? '/jokes/' + ${joke.id} : '/jokes'}"
+      th:action="@{/jokes/{id}(id=${joke.id})}"
       method="post">
+    <input type="hidden" th:if="${joke.id == null}" name="id" value="" />
 
-    <!-- Mostrar errores globales -->
     <div th:if="${#fields.hasErrors('*')}">
         <ul>
             <li th:each="err : ${#fields.errors('*')}"
@@ -20,7 +19,6 @@
         </ul>
     </div>
 
-    <!-- Texto 1 -->
     <div>
         <label for="text1">Texto 1</label>
         <input type="text" id="text1" th:field="*{text1}" />
@@ -28,7 +26,6 @@
            th:errors="*{text1}">Error texto 1</p>
     </div>
 
-    <!-- Texto 2 -->
     <div>
         <label for="text2">Texto 2</label>
         <input type="text" id="text2" th:field="*{text2}" />
@@ -36,7 +33,6 @@
            th:errors="*{text2}">Error texto 2</p>
     </div>
 
-    <!-- Categoría -->
     <div>
         <label for="category">Categoría</label>
         <select id="category" th:field="*{category.id}">
@@ -50,7 +46,6 @@
            th:errors="*{category.id}">Error categoría</p>
     </div>
 
-    <!-- Tipo -->
     <div>
         <label for="type">Tipo</label>
         <select id="type" th:field="*{type.id}">
@@ -64,7 +59,6 @@
            th:errors="*{type.id}">Error tipo</p>
     </div>
 
-    <!-- Lenguaje -->
     <div>
         <label for="language">Lenguaje</label>
         <select id="language" th:field="*{language.id}">
@@ -78,7 +72,6 @@
            th:errors="*{language.id}">Error lenguaje</p>
     </div>
 
-    <!-- Flags (checkbox múltiple) -->
     <div>
         <p>Flags:</p>
         <div th:each="flag : ${flags}">
@@ -93,10 +86,9 @@
            th:errors="*{flags}">Error flags</p>
     </div>
 
-    <!-- Submit -->
     <div>
         <button type="submit"
-                th:text="${joke.id} != null ? 'Actualizar' : 'Crear'">
+                th:text="${joke.id != null} ? 'Actualizar' : 'Crear'">
             Guardar
         </button>
         <a th:href="@{/jokes}">Cancelar</a>
