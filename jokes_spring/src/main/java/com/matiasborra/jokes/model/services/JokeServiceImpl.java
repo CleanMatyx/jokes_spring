@@ -1,13 +1,7 @@
 package com.matiasborra.jokes.model.services;
 
 import com.matiasborra.jokes.model.dao.*;
-import com.matiasborra.jokes.model.entity.Category;
-import com.matiasborra.jokes.model.entity.Flag;
-import com.matiasborra.jokes.model.entity.Joke;
-import com.matiasborra.jokes.model.entity.JokeFlag;
-import com.matiasborra.jokes.model.entity.Language;
-import com.matiasborra.jokes.model.entity.Type;
-
+import com.matiasborra.jokes.model.entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -22,7 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class JokeServiceImpl implements IJokeServices {
+public class JokeServiceImpl implements IJokeService {
 
     @Autowired
     private IJokeDAO jokeDAO;

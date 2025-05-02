@@ -3,7 +3,7 @@ package com.matiasborra.jokes.controller;
 import com.matiasborra.jokes.model.entity.Flag;
 import com.matiasborra.jokes.model.entity.Joke;
 import com.matiasborra.jokes.model.entity.JokeFlag;
-import com.matiasborra.jokes.model.services.IJokeServices;
+import com.matiasborra.jokes.model.services.IJokeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,24 +19,24 @@ import java.beans.PropertyEditorSupport;
 public class JokeViewController {
 
     @Autowired
-    private IJokeServices service;
+    private IJokeService service;
 
     // Registra aquí el PropertyEditor
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(JokeFlag.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) throws IllegalArgumentException {
-                if (text == null || text.isEmpty()) {
-                    setValue(null);
-                } else {
-                    Long id = Long.valueOf(text);
-                    Flag flag = service.findFlagById(id)
-                            .orElseThrow(() -> new IllegalArgumentException("Flag no encontrada: " + id));
-                    setValue(flag);
-                }
-            }
-        });
+//        binder.registerCustomEditor(JokeFlag.class, new PropertyEditorSupport() {
+//            @Override
+//            public void setAsText(String text) throws IllegalArgumentException {
+//                if (text == null || text.isEmpty()) {
+//                    setValue(null);
+//                } else {
+//                    Long id = Long.valueOf(text);
+//                    Flag flag = service.findFlagById(id)
+//                            .orElseThrow(() -> new IllegalArgumentException("Flag no encontrada: " + id));
+//                    setValue(flag);
+//                }
+//            }
+//        });
     }
 
     // 1) Listado de todos los jokes

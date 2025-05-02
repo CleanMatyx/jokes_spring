@@ -1,50 +1,45 @@
 package com.matiasborra.jokes.model.entity;
 
 import jakarta.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "joke_flag")
-public class JokeFlag {
+@Table(name = "jokes_flags", schema = "public")
+public class JokeFlag implements Serializable {
 
-    @EmbeddedId
-    private JokeFlagId id = new JokeFlagId();  // ← inicializa aquí
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-    @MapsId("jokeId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "joke_id")
-    private Joke joke;
+    @Id
+    @Column(name = "joke_id", nullable = false)
+    private Integer jokeId;
 
-    @MapsId("flagId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "flag_id")
-    private Flag flag;
+    @Id
+    @Column(name = "flag_id", nullable = false)
+    private Integer flagId;
 
-    // al usar Lombok @Data te genera setters automáticos,
-    // pero para asegurarte de que el id se sincronice,
-    // puedes hacer manualmente estos setters:
-    public void setJoke(Joke joke) {
-        this.joke = joke;
-        this.id.setJokeId(joke.getId());
+    public JokeFlag() {
     }
 
-    public void setFlag(Flag flag) {
-        this.flag = flag;
-        this.id.setFlagId(flag.getId());
+    public JokeFlag(Integer jokeId, Integer flagId) {
+        this.jokeId = jokeId;
+        this.flagId = flagId;
     }
 
-    public JokeFlagId getId() {
-        return id;
+    public Integer getJokeId() {
+        return jokeId;
     }
 
-    public void setId(JokeFlagId id) {
-        this.id = id;
+    public void setJokeId(Integer jokeId) {
+        this.jokeId = jokeId;
     }
 
-    public Joke getJoke() {
-        return joke;
+    public Integer getFlagId() {
+        return flagId;
     }
 
-    public Flag getFlag() {
-        return flag;
+    public void setFlagId(Integer flagId) {
+        this.flagId = flagId;
     }
 }
