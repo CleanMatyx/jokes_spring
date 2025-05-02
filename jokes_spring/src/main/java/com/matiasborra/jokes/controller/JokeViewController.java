@@ -1,5 +1,6 @@
 package com.matiasborra.jokes.controller;
 
+import com.matiasborra.jokes.dto.CreateJokeDto;
 import com.matiasborra.jokes.model.entity.Flag;
 import com.matiasborra.jokes.model.entity.Joke;
 import com.matiasborra.jokes.model.entity.JokeFlag;
@@ -58,7 +59,7 @@ public class JokeViewController {
 
     // 3) Procesar creación
     @PostMapping
-    public String createJoke(@Valid @ModelAttribute("joke") Joke joke,
+    public String createJoke(@Valid @ModelAttribute("joke") CreateJokeDto joke,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("titulo", "Nuevo Joke");
@@ -82,7 +83,7 @@ public class JokeViewController {
     // 5) Procesar edición
     @PostMapping("/{id}")
     public String updateJoke(@PathVariable Long id,
-                             @Valid @ModelAttribute("joke") Joke joke,
+                             @Valid @ModelAttribute("joke") CreateJokeDto joke,
                              BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("titulo", "Editar Joke");

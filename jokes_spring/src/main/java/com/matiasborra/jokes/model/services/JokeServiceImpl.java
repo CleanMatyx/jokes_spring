@@ -1,9 +1,6 @@
 package com.matiasborra.jokes.model.services;
 
-import com.matiasborra.jokes.dto.CategoryDto;
-import com.matiasborra.jokes.dto.FlagDto;
-import com.matiasborra.jokes.dto.JokeDto;
-import com.matiasborra.jokes.dto.LanguageDto;
+import com.matiasborra.jokes.dto.*;
 import com.matiasborra.jokes.model.dao.*;
 import com.matiasborra.jokes.model.entity.*;
 import jakarta.persistence.EntityManager;
@@ -54,9 +51,9 @@ public class JokeServiceImpl implements IJokeService {
         return toDto(entity);
     }
 
-    @Override
     @Transactional
-    public Joke create(Joke in) {
+    @Override
+    public CreateJokeDto create(Joke in) {
         Category cat = categoryDAO.getReferenceById(in.getCategory().getId());
         Type type = typeDAO.getReferenceById(in.getType().getId());
         Language lang = languageDAO.getReferenceById(in.getLanguage().getId());

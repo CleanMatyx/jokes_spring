@@ -1,6 +1,6 @@
 package com.matiasborra.jokes.controller;
 
-import com.matiasborra.jokes.dto.JokeDto;
+import com.matiasborra.jokes.dto.*;
 import com.matiasborra.jokes.model.entity.Joke;
 import com.matiasborra.jokes.model.services.IJokeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,163 +9,138 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
 
+import jakarta.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/jokes")
 public class JokeRestController {
+
+    private final IJokeService jokeService;
+
     @Autowired
-    private IJokeService jokeService;
-
-    @GetMapping({"", "/", "/jokes"})
-    public ResponseEntity<?> index() {
-        List<JokeDto> jokes = new ArrayList<>();
-        Map<String, Object> resp = new HashMap<>();
-
-        try {
-            jokes = jokeService.findAll();
-        } catch (DataAccessException e) {
-            resp.put("Message", "Error al realizar la consulta");
-            resp.put("Error", e.getMessage()
-                    .concat(":")
-                    .concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<List<Joke>>(jokes, HttpStatus.OK);
+    public JokeRestController(IJokeService jokeService) {
+        this.jokeService = jokeService;
     }
 
-    @GetMapping("/jokes/{id}")
-    public ResponseEntity<?> show(@PathVariable Long id) {
-        Joke joke = null;
+    @GetMapping
+    public ResponseEntity<?> getAll() {
         Map<String, Object> resp = new HashMap<>();
-
         try {
-            joke = jokeService.findById(id);
+            List<JokeDto> jokes = jokeService.findAll();
+            return new ResponseEntity<>(jokes, HttpStatus.OK);
         } catch (DataAccessException e) {
-            resp.put("Message", "Error al realizar la consulta");
-            resp.put("Error", e.getMessage()
-                    .concat(":")
-                    .concat(e.getMostSpecificCause().getMessage()));
+            resp.put("message", "Error fetching jokes");
+            resp.put("error", e.getMostSpecificCause().getMessage());
             return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        if (joke == null) {
-            resp.put("Message", "El chiste con ID: "
-                    .concat(id.toString().concat(" no existe en la base de datos")));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        Map<String, Object> resp = new HashMap<>();
+        try {
+            Joke joke = jokeService.findById(id);
+            return new ResponseEntity<>(joke, HttpStatus.OK);
+        } catch (NoSuchElementException | DataAccessException e) {
+            resp.put("message", "Joke not found with id " + id);
             return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<Joke>(joke, HttpStatus.OK);
     }
 
-    @PostMapping("/jokes")
-    public ResponseEntity<?> create(@Valid @RequestBody Joke joke, BindingResult result) {
-        Joke newJoke = null;
+    @PostMapping
+    public ResponseEntity<?> create(@Valid @RequestBody CreateJokeDto dto, BindingResult result) {
         Map<String, Object> resp = new HashMap<>();
         if (result.hasErrors()) {
-            List<String> errors = result.getFieldErrors()
-                    .stream()
-                    .map(err -> "El campo '" + err.getField() + "' " + err.getDefaultMessage())
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(err -> "Field '" + err.getField() + "' " + err.getDefaultMessage())
                     .collect(Collectors.toList());
             resp.put("errors", errors);
-            return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
         }
-
         try {
-            joke.setText1(joke.getText1());
-            joke.setText2(joke.getText2());
-            joke.setType(joke.getType());
-            joke.setCategory(joke.getCategory());
-            joke.setLanguage(joke.getLanguage());
-            joke.setFlags(joke.getFlags());
-            newJoke = jokeService.create(joke);
+            JokeDto created = jokeService.create(dto);
+            resp.put("message", "Joke created successfully");
+            resp.put("joke", created);
+            return new ResponseEntity<>(resp, HttpStatus.CREATED);
         } catch (DataAccessException e) {
-            resp.put("Message", "Error al realizar el insert");
-            resp.put("Error", e.getMessage()
-                    .concat(":")
-                    .concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+            resp.put("message", "Error creating joke");
+            resp.put("error", e.getMostSpecificCause().getMessage());
+            return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        resp.put("Message", "Chiste creado con éxito");
-        resp.put("Chiste", newJoke);
-        return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.CREATED);
     }
 
-    @PutMapping("/jokes/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody Joke joke, BindingResult result) {
-        Joke jokeToUpdate = null;
-        Joke jokeUpdated = null;
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id,
+                                    @Valid @RequestBody CreateJokeDto dto,
+                                    BindingResult result) {
         Map<String, Object> resp = new HashMap<>();
-
-        if(result.hasErrors()) {
-            List<String> errors = result.getFieldErrors()
-                    .stream()
-                    .map(err -> "El campo '" + err.getField() + "' " + err.getDefaultMessage())
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(err -> "Field '" + err.getField() + "' " + err.getDefaultMessage())
                     .collect(Collectors.toList());
             resp.put("errors", errors);
-            return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
         }
-
         try {
-            jokeToUpdate = jokeService.findById(id);
-
-            if(jokeToUpdate == null) {
-                resp.put("Message", "Error: no se pudo editar, el chiste ID: "
-                        .concat(id.toString().concat(" no existe en la base de datos")));
-                return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.NOT_FOUND);
-            }
+            JokeDto updated = jokeService.update(id, dto);
+            resp.put("message", "Joke updated successfully");
+            resp.put("joke", updated);
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            resp.put("message", "Joke not found with id " + id);
+            return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
         } catch (DataAccessException e) {
-            resp.put("Message", "Error al realizar la consulta");
-            resp.put("Error", e.getMessage()
-                    .concat(":")
-                    .concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+            resp.put("message", "Error updating joke");
+            resp.put("error", e.getMostSpecificCause().getMessage());
+            return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        try {
-            jokeToUpdate.setText1(joke.getText1());
-            jokeToUpdate.setText2(joke.getText2());
-            jokeToUpdate.setType(joke.getType());
-            jokeToUpdate.setCategory(joke.getCategory());
-            jokeToUpdate.setLanguage(joke.getLanguage());
-            jokeToUpdate.setFlags(joke.getFlags());
-            jokeUpdated = jokeService.update(id, jokeToUpdate);
-        } catch (DataAccessException e) {
-            resp.put("Message", "Error al realizar la actualización");
-            resp.put("Error", e.getMessage()
-                    .concat(":")
-                    .concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        resp.put("Message", "El chiste con ID:"
-                .concat(id.toString().concat(" ha sido actualizado con éxito")));
-        resp.put("Chiste", jokeUpdated);
-        return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/jokes/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         Map<String, Object> resp = new HashMap<>();
-
         try {
-            if (jokeService.findById(id) == null) {
-                resp.put("Message", "Error: no se pudo eliminar, el chiste ID: "
-                        .concat(id.toString().concat(" no existe en la base de datos")));
-                return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.NOT_FOUND);
-            }
             jokeService.delete(id);
+            resp.put("message", "Joke deleted successfully");
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            resp.put("message", "Joke not found with id " + id);
+            return new ResponseEntity<>(resp, HttpStatus.NOT_FOUND);
         } catch (DataAccessException e) {
-            resp.put("Message", "Error al realizar la eliminación");
-            resp.put("Error", e.getMessage()
-                    .concat(":")
-                    .concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+            resp.put("message", "Error deleting joke");
+            resp.put("error", e.getMostSpecificCause().getMessage());
+            return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        resp.put("Message", "Chiste borrado correctamente");
-        return new ResponseEntity<Map<String, Object>>(resp, HttpStatus.OK);
+    }
+
+    @GetMapping("/categories")
+    public List<CategoryDto> getCategories() {
+        return jokeService.findAllCategories();
+    }
+
+    @GetMapping("/types")
+    public List<TypeDto> getTypes() {
+        return jokeService.findAllTypes();
+    }
+
+    @GetMapping("/languages")
+    public List<LanguageDto> getLanguages() {
+        return jokeService.findAllLanguages();
+    }
+
+    @GetMapping("/flags")
+    public List<FlagDto> getFlags() {
+        return jokeService.findAllFlags();
+    }
+
+    @GetMapping("/flags/{id}")
+    public ResponseEntity<FlagDto> getFlag(@PathVariable Long id) {
+        Optional<FlagDto> flag = jokeService.findFlagById(id);
+        return flag.map(f -> new ResponseEntity<>(f, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 }

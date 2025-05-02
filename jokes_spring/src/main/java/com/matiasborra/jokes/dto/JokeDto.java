@@ -4,9 +4,18 @@ public class JokeDto {
     private Long id;
     private String text1;
     private String text2;
+    private Long typeId;
     private CategoryDto category;
     private LanguageDto language;
     private Set<FlagDto> flags;
+
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
 
     public Long getId() {
         return id;

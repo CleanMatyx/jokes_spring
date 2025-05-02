@@ -16,16 +16,16 @@ public class CreateJokeDto {
     public void setId(Long id) { this.id = id; }
 
     // categoría
-    public Long getCategory() { return categoryId; }
-    public void setCategory(Long categoryId) { this.categoryId = categoryId; }
+    public Long getCategoryId() { return categoryId; }
+    public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
 
     // tipo
-    public Long getType() { return typeId; }
-    public void setType(Long typeId) { this.typeId = typeId; }
+    public Long getTypeId() { return typeId; }
+    public void setTypeId(Long typeId) { this.typeId = typeId; }
 
     // lenguaje
-    public Long getLanguage() { return languageId; }
-    public void setLanguage(Long languageId) { this.languageId = languageId; }
+    public Long getLanguageId() { return languageId; }
+    public void setLanguageId(Long languageId) { this.languageId = languageId; }
 
     // textos
     public String getText1() { return text1; }
@@ -34,6 +34,6 @@ public class CreateJokeDto {
     public void setText2(String text2) { this.text2 = text2; }
 
     // flags
-    public List<Long> getFlags() { return flagIds; }
-    public void setFlags(List<Long> flagIds) { this.flagIds = flagIds; }
+    public List<Long> getFlagIds() { return flagIds; }
+    public void setFlagIds(List<Long> flagIds) { this.flagIds = flagIds; }
 }
